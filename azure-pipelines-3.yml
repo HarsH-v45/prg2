@@ -8,6 +8,16 @@ pool:
     - Agent.Version -gtVersion 4.255.0
 
 steps:
+- checkout: self
+
+# ✅ Set JAVA_HOME manually BEFORE Maven task
+- script: |
+    echo "Setting JAVA_HOME manually"
+    set JAVA_HOME=C:\Program Files\Java\jdk-17
+    echo JAVA_HOME is %JAVA_HOME%
+  displayName: 'Set JAVA_HOME'
+
+# ✅ Run Maven using PATH option instead of environment variable
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -15,8 +25,8 @@ steps:
     options: '-B'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
+    javaHomeOption: 'Path'
+    jdkDirectory: 'C:\\Program Files\\Java\\jdk-17'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
